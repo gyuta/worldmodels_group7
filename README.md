@@ -21,7 +21,8 @@
 
 ## GitHub
 
-* [Diversity Is All You Need](https://github.com/ben-eysenbach/sac/blob/master/DIAYN.md)
+* [Deep Reinforcement Learning Algorithms with PyTorch](https://github.com/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch)
+* [Soft Actor-Critic, DIAYN.md](https://github.com/ben-eysenbach/sac/blob/master/DIAYN.md)
 * [Diversity Is All You Need (DIAYN) Implementation using RLkit](https://github.com/johnlime/RlkitExtension)
 * [Exploration through Hierarchical Meta Reinforcement Learning](https://github.com/navneet-nmk/Hierarchical-Meta-Reinforcement-Learning)
 
