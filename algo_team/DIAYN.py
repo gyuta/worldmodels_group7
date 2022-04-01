@@ -6,9 +6,9 @@ import random
 import time
 import copy
 import torch.nn.functional as F
-# from agents.Base_Agent import Base_Agent
-# from agents.DQN_agents.DDQN import DDQN
-# from agents.actor_critic_agents.SAC import SAC
+from algo_team.Base_Agent import Base_Agent
+from algo_team.DDQN import DDQN
+from algo_team.SAC import SAC
 
 # NOTE: DIAYN calculates diversity of states penalty each timestep but it might be better to only base it on where the
 # agent got to in the last timestep, or after X timesteps

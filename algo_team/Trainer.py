@@ -73,7 +73,7 @@ class Trainer(object):
         }
         return agent_to_color_dictionary
 
-    def run_games_for_agents(self):
+    def train(self):
         """Run a set of games for each agent. Optionally visualising and/or saving the results"""
         self.results = self.create_object_to_store_results()
         for agent_number, agent_class in enumerate(self.agents):
