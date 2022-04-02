@@ -9,6 +9,7 @@ import torch.nn.functional as F
 from algo_team.Base_Agent import Base_Agent
 from algo_team.DDQN import DDQN
 from algo_team.SAC import SAC
+import gym
 
 # NOTE: DIAYN calculates diversity of states penalty each timestep but it might be better to only base it on where the
 # agent got to in the last timestep, or after X timesteps
@@ -36,14 +37,16 @@ class DIAYN(Base_Agent):
         self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(),
                                                   lr=self.hyperparameters["DISCRIMINATOR"]["learning_rate"])
         self.agent_config = copy.deepcopy(config)
-        self.agent_config.environment = DIAYN_Skill_Wrapper(copy.deepcopy(self.environment), self.num_skills, self)
+        env1 = gym.make("LunarLanderContinuous-v2")
+        self.agent_config.environment = DIAYN_Skill_Wrapper(env1, self.num_skills, self)
         self.agent_config.hyperparameters = self.agent_config.hyperparameters["AGENT"]
         self.agent_config.hyperparameters["do_evaluation_iterations"] = False
         self.agent = SAC(self.agent_config)  # We have to use SAC because it involves maximising the policy's entropy over actions which is also a part of DIAYN
 
         self.timesteps_to_give_up_control_for = self.hyperparameters["MANAGER"]["timesteps_to_give_up_control_for"]
         self.manager_agent_config = copy.deepcopy(config)
-        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(copy.deepcopy(self.environment), self.agent,
+        env2 = gym.make("LunarLanderContinuous-v2")
+        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(env2, self.agent,
                                                                             self.timesteps_to_give_up_control_for, self.num_skills)
         self.manager_agent_config.hyperparameters = self.manager_agent_config.hyperparameters["MANAGER"]
         self.manager_agent = DDQN(self.manager_agent_config)
