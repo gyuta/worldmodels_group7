@@ -73,7 +73,8 @@ dqn_agent_hyperparameters = {
     "final_layer_activation": "None",
     "batch_norm": False,
     "gradient_clipping_norm": 5,
-    "clip_rewards": False
+    "clip_rewards": False,
+    "learning_iterations": 1
 }
 
 

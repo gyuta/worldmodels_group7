@@ -37,16 +37,14 @@ class DIAYN(Base_Agent):
         self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(),
                                                   lr=self.hyperparameters["DISCRIMINATOR"]["learning_rate"])
         self.agent_config = copy.deepcopy(config)
-        env1 = gym.make("LunarLanderContinuous-v2")
-        self.agent_config.environment = DIAYN_Skill_Wrapper(env1, self.num_skills, self)
+        self.agent_config.environment = DIAYN_Skill_Wrapper(config.low_env, self.num_skills, self)
         self.agent_config.hyperparameters = self.agent_config.hyperparameters["AGENT"]
         self.agent_config.hyperparameters["do_evaluation_iterations"] = False
         self.agent = SAC(self.agent_config)  # We have to use SAC because it involves maximising the policy's entropy over actions which is also a part of DIAYN
 
         self.timesteps_to_give_up_control_for = self.hyperparameters["MANAGER"]["timesteps_to_give_up_control_for"]
         self.manager_agent_config = copy.deepcopy(config)
-        env2 = gym.make("LunarLanderContinuous-v2")
-        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(env2, self.agent,
+        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(config.high_env, self.agent,
                                                                             self.timesteps_to_give_up_control_for, self.num_skills)
         self.manager_agent_config.hyperparameters = self.manager_agent_config.hyperparameters["MANAGER"]
         self.manager_agent = DDQN(self.manager_agent_config)

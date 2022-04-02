@@ -3,11 +3,12 @@ import torch.nn as nn
 import numpy as np
 import gym
 
-class WorldModel:
-    def __init__(self, env):
-        self.env = env
+class WorldModel(gym.Wrapper):
+    def __init__(self, env, maxstep = 100):
+        super().__init__(env)
         self.model = NN(env.observation_space.shape[0], env.action_space.shape[0])
         self.optim = torch.optim.Adam(self.model.parameters())
+        self._max_episode_steps = maxstep
 
     def train(self):
         buffer = Buffer(self.env.observation_space.shape[0], self.env.action_space.shape[0])
@@ -35,6 +36,9 @@ class WorldModel:
             print("loss", loss.item())
     
     def step(self, action):
+        self.count += 1
+        done = self.count > self._max_episode_steps
+
         if type(action) is not np.ndarray:
             action = np.ndarray(action)
         
@@ -45,10 +49,11 @@ class WorldModel:
         n_obs = self.model(x)
         n_obs = n_obs.to('cpu').detach().numpy().copy()
         self.obs = n_obs
-        return n_obs, 0, False, {} # done の判定ができないのが良くないかも
+        return n_obs, 0, done, {} # done の判定ができないのが良くないかも
     
     def reset(self):
         self.obs = self.env.reset() #あんまよくない。余裕があれば修正
+        self.count = 0
         return self.obs
 
 class Buffer():

@@ -4,6 +4,8 @@ class Config(object):
     def __init__(self):
         self.seed = None
         self.environment = None
+        self.low_env = None
+        self.high_env = None
         self.requirements_to_solve_game = None
         self.num_episodes_to_run = None
         self.file_to_save_data_results = None
