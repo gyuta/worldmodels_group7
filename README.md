@@ -5,6 +5,13 @@
 * Learning World Models with Skills
   * 世界モデルではデータから外界の予測モデルを獲得するが，そのためのデータをどのように取得するのかが問題になる．ここでは，(1)DIAYN[^1]やDADS[^2]に基づくスキルの獲得，(2) 獲得したスキルに基づいた探索によるデータの取得と世界モデルの学習を交互に繰り返すことの有効性を検証する．Mujoco，Habitat[^3]，Soft Gym[^4]などの環境で有効性を評価する．
 
+## usage
+algo_test.py: LunarLander を動かす用
+
+pip,conda でbox2d-py, pygame を入れる必要あり
+
+これらが入らないときは,brew,aptなどでswigを入れる
+
 ## ipynb
 
 * [最終イメージ.ipynb](https://colab.research.google.com/drive/1G-2ubL8gU18NEBjQo1NHRVQmfXTjRPnV?usp=sharing)
