@@ -9,6 +9,7 @@ import torch.nn.functional as F
 from algo_team.Base_Agent import Base_Agent
 from algo_team.DDQN import DDQN
 from algo_team.SAC import SAC
+from util import save
 import gym
 
 # NOTE: DIAYN calculates diversity of states penalty each timestep but it might be better to only base it on where the
@@ -26,6 +27,8 @@ class DIAYN(Base_Agent):
     agent_name = "DIAYN"
 
     def __init__(self, config):
+        self._save_path = config.save_path
+
         super().__init__(config)
         self.training_mode = True
         self.num_skills = config.hyperparameters["num_skills"]
@@ -52,10 +55,17 @@ class DIAYN(Base_Agent):
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
         start = time.time()
         self.agent.run_n_episodes(num_episodes=self.unsupervised_episodes, show_whether_achieved_goal=False)
-        game_full_episode_scores, rolling_results, _ = self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
+        # game_full_episode_scores, rolling_results, _ = self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
+        game_full_episode_scores, rolling_results = self.manager_run()
         time_taken = time.time() - start
         pretraining_results = [np.min(self.agent.game_full_episode_scores)] * self.unsupervised_episodes
         return pretraining_results + game_full_episode_scores, pretraining_results + rolling_results, time_taken
+
+    def manager_run(self, save_path = ""):
+        game_full_episode_scores, rolling_results, _ = self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
+        save(game_full_episode_scores, self._save_path, "full_ep_scores")
+        save(rolling_results, self._save_path, "rolling_results")
+        return game_full_episode_scores, rolling_results
 
     def disciminator_learn(self, skill, discriminator_outputs):
         if not self.training_mode: return
