@@ -9,21 +9,28 @@ import gym
 env = gym.make("LunarLanderContinuous-v2")
 
 USE_WORLDMODEL = False # 適宜変更
+WORLDMODEL_TRAIN_NUM = 10**4
+
+DIAYN_TRAIN_EPISODE = 20
+DDQN_TRAIN_EPISODE = 5
 
 if USE_WORLDMODEL:
     # 世界モデルチーム
     worldmodel = WorldModel(env)
-    worldmodel.train()
+    worldmodel.train(WORLDMODEL_TRAIN_NUM)
     lowenv = worldmodel
 else:
     lowenv = env
 
 config.low_env = lowenv
 config.high_env = gym.make("LunarLanderContinuous-v2")
-config.save_path = get_outputdir()
+path = get_outputdir()
+config.save_path = path
 
-config.num_episodes_to_run = 10
-config.hyperparameters["DIAYN"]["num_unsupservised_episodes"] = 5
+config.num_episodes_to_run = DIAYN_TRAIN_EPISODE + DDQN_TRAIN_EPISODE
+config.hyperparameters["DIAYN"]["num_unsupservised_episodes"] = DIAYN_TRAIN_EPISODE
+
+write(config.hyperparameters, path, "result")
 
 diayn_trainer = Trainer(config, DIAYN)
 diayn_trainer.train()

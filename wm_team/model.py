@@ -10,10 +10,10 @@ class WorldModel(gym.Wrapper):
         self.optim = torch.optim.Adam(self.model.parameters())
         self._max_episode_steps = maxstep
 
-    def train(self):
+    def train(self, num):
         buffer = Buffer(self.env.observation_space.shape[0], self.env.action_space.shape[0])
         mse_loss = nn.MSELoss()
-        for i in range(5):
+        for i in range(num):
             obs = self.env.reset()
             done = False
             while not done:

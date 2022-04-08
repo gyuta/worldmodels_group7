@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from algo_team.Base_Agent import Base_Agent
 from algo_team.DDQN import DDQN
 from algo_team.SAC import SAC
-from util import save
+from util import save, write
 import gym
 
 # NOTE: DIAYN calculates diversity of states penalty each timestep but it might be better to only base it on where the
@@ -63,6 +63,8 @@ class DIAYN(Base_Agent):
 
     def manager_run(self, save_path = ""):
         game_full_episode_scores, rolling_results, _ = self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
+        write(f"game full episode scores {game_full_episode_scores}", self._save_path, "result")
+        write(f"rolling results {rolling_results}", self._save_path, "result")
         save(game_full_episode_scores, self._save_path, "full_ep_scores")
         save(rolling_results, self._save_path, "rolling_results")
         return game_full_episode_scores, rolling_results

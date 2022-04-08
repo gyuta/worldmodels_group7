@@ -13,3 +13,7 @@ def get_outputdir():
 def save(obj, path, name):
     with open(f"{path}/{name}.pkl", "wb") as f:
         pickle.dump(obj, f)
+
+def write(txt, path, name):
+    with open(f"{path}/{name}.txt", "a") as f:
+        f.write(f"{txt}\n")

@@ -22,3 +22,6 @@ class Config(object):
         self.show_solution_score = False
         self.debug_mode = False
         self.save_path = ""
+    
+    def __str__(self):
+        pass
